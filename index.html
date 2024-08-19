@@ -128,7 +128,11 @@
 
             headPos.project( camera );
             tailPos.project( camera );
-            banner.center.set( headPos.x > tailPos.x, 0.5 );
+            banner.center.set( lerp( banner.center.x, headPos.x > tailPos.x, 0.2), 0.5 );
+
+            function lerp( a, b, alpha ) {
+                return a + alpha * ( b - a );
+            }
         }
 
         function animate() {
