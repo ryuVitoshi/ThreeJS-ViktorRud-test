@@ -63,9 +63,9 @@
 
             //setup head and tail of plane
             head = new THREE.Object3D();
-            head.position.set( -2.3, 1, 1.3 );
+            head.position.set( 3, 1, 0 );
             tail = new THREE.Object3D();
-            tail.position.set( 4.2, 1, -1.7 );
+            tail.position.set( -6, 1, 0 );
 
             //banner setup
             const bannerDiv = document.getElementById( 'banner' );
@@ -76,6 +76,12 @@
             const loader = new GLTFLoader();
             loader.load( 'plane.glb', function ( gltf ) {
                 plane = gltf.scene;
+                plane.traverse(function(object) {
+                    if (object.isMesh) {
+                        object.rotation.y = Math.PI * 0.87;
+                        object.rotation.x = -Math.PI * 0.1;
+                    }
+                });
                 plane.add( banner );
                 plane.add( head );
                 plane.add( tail );
@@ -98,9 +104,10 @@
             const controls = new OrbitControls( camera, bannerRenderer.domElement );
             controls.enableDamping = true;
             controls.dampingFactor = 0.2;
-            controls.target = new THREE.Vector3(0, 0, 0);
             controls.zoomSpeed = 0.9;
             controls.rotateSpeed = 0.65;
+            controls.minDistance = 30;
+            controls.maxDistance = 450;
 
 			window.addEventListener( 'resize', onWindowResize );
             initGUI();
@@ -140,7 +147,7 @@
             const elapsed = clock.getElapsedTime();
             if ( plane ) {
                 plane.position.set( Math.sin( elapsed * 0.5 ) * options.radius, 0, Math.cos( elapsed * 0.5 ) * options.radius );
-                plane.rotation.y = elapsed * 0.5 + Math.PI * 0.87;
+                plane.rotation.y = elapsed * 0.5;
             }
             updateBannerPosition();
             renderer.render( scene, camera );
